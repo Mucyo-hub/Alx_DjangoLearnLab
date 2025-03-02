@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required , permission_required
 from .models import Book
 from django.db.models import Q
 from .forms import BookForm # type: ignore
+from .forms import ExampleForm
+
 
 # View all books (Requires "can_view" permission)
 @login_required
