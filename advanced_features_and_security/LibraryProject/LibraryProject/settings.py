@@ -140,3 +140,14 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'bookshelf.CustomUser'
+# Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = True  
+
+# Enable HTTP Strict Transport Security (HSTS) for 1 year (31536000 seconds)
+SECURE_HSTS_SECONDS = 31536000  
+
+# Apply HSTS policy to all subdomains
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  
+
+# Preload HSTS for better security
+SECURE_HSTS_PRELOAD = True  
