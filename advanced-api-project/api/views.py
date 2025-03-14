@@ -1,8 +1,7 @@
 from django.shortcuts import render
 from django_filters import rest_framework
 from rest_framework import mixins
-from rest_framework.permissions import IsAuthenticated
-
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework import generics, filters
 
 from django_filters.rest_framework import DjangoFilterBackend
