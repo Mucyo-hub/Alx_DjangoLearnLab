@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django_filters import rest_framework
+from rest_framework import mixins
+from rest_framework.permissions import IsAuthenticated
+
 from rest_framework import generics, filters
 
 from django_filters.rest_framework import DjangoFilterBackend
@@ -28,5 +31,31 @@ class BookListView (generics.ListAPIView):
   filterset_fields = ['title','author__name' 'publication_year']
   search_fields = ['title','author__name']
   ordering_fields = ['title','publication_year']
+  permission_classes = []  # No authentication required
+
+
+class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = []  # No authentication required
+
+
+class BookCreateView(generics.CreateAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]  # Only authenticated users
+
+
+class BookUpdateView(generics.UpdateAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]  # Only authenticated users
+
+
+class BookDeleteView(generics.DestroyAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]  # Only authenticated users
+
 
 
