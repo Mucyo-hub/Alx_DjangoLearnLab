@@ -2,10 +2,16 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from .models import Book
+from django.contrib.auth.models import User
 
 class BookAPITestCase(APITestCase):
     
     def setUp(self):
+         # Create a test user
+        self.user = User.objects.create_user(username='testuser', password='password123') 
+        
+        # Log the user in
+        self.client.login(username='testuser', password='password123')
         # Create a sample book for testing
         self.book = Book.objects.create(title="Test Book", author="John Doe", description="A test book.")
         self.create_url = reverse('book-create')
