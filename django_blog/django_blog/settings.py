@@ -75,11 +75,13 @@ WSGI_APPLICATION = 'django_blog.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'default':{
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+    
+
 
 
 # Password validation
