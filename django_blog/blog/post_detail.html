@@ -1,5 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
+<html lang="en"></html>
 <html>
 <head>
     <title>{{ post.title }}</title>
@@ -10,5 +11,28 @@
     <p>{{ post.content }}</p>
     <p><a href="{% url 'post_update' post.pk %}">Edit</a></p>
     <p><a href="{% url 'post_delete' post.pk %}">Delete</a></p>
+    <h2>Comments</h2>
+    <ul>
+        {% for comment in comments %}
+            <li>
+                <p><strong>{{ comment.author }}</strong>: {{ comment.content }}</p>
+                <p><small>{{ comment.created_at }}</small></p>
+                {% if comment.author == user %}
+                    <a href="{% url 'edit_comment' comment.pk %}">Edit</a> | 
+                    <a href="{% url 'delete_comment' comment.pk %}">Delete</a>
+                {% endif %}
+            </li>
+        {% empty %}
+            <p>No comments yet.</p>
+        {% endfor %}
+    </ul>
+
+    <h3>Add a Comment</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Comment</button>
+
+</form>
 </body>
 </html>

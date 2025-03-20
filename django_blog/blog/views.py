@@ -9,6 +9,56 @@ from .forms import PostForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LogoutView
 from .forms import CustomUserCreationForm
+from django.http import HttpResponseForbidden
+from .models import Post,Comment
+from .forms import CommentForm
+
+
+# Display Post Detail and Comments
+def post_detail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    comments = post.comments.all()
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.post = post
+            comment.save()
+            return redirect(post)
+    else:
+        form = CommentForm()
+
+    return render(request, 'blog/post_detail.html', {'post': post, 'comments': comments, 'form': form})
+
+# Edit Comment
+@login_required
+def edit_comment(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    if comment.author != request.user:
+        return HttpResponseForbidden("You can only edit your own comments.")
+    
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            return redirect(comment.post)
+    else:
+        form = CommentForm(instance=comment)
+    
+    return render(request, 'blog/edit_comment.html', {'form': form})
+
+# Delete Comment
+@login_required
+def delete_comment(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    if comment.author != request.user:
+        return HttpResponseForbidden("You can only delete your own comments.")
+    
+    comment.delete()
+    return redirect(comment.post)
+
+
 
 # Create a new blog post
 class PostCreateView(login_required, CreateView):
