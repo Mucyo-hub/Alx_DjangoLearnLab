@@ -6,6 +6,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth import login, authenticate
 from .models import Post
 from .forms import PostForm
+from django.db.models import Q
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LogoutView
 from .forms import CustomUserCreationForm
@@ -13,6 +14,16 @@ from django.http import HttpResponseForbidden
 from .models import Post,Comment
 from .forms import CommentForm
 from django.views.generic import CommentCreateView,CommentUpdateView,CommentDeleteView
+
+def post_list(request):
+    query = request.GET.get('q')
+    if query:
+        posts = Post.objects.filter(
+            Q(title__icontains=query) | Q(content__icontains=query) | Q(tags__name__icontains=query)
+        ).distinct()
+    else:
+        posts = Post.objects.all()
+    return render(request, 'blog/post_list.html', {'posts': posts})
 
 
 # Display Post Detail and Comments
