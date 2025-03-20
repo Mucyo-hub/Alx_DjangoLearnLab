@@ -3,6 +3,7 @@ from .views import PostListView, PostDetailView, PostCreateView, PostUpdateView,
 from .views import CommentCreateView,CommentUpdateView,CommentDeleteView
 from . import views
 from .views import post_list, post_detail
+from .views import PostByTagListView
 
 urlpatterns = [
     path('', PostListView.as_view(), name='home'),  # List view
@@ -17,4 +18,5 @@ urlpatterns = [
     path('', post_list, name='post_list'),
     path('post/<int:pk>/', post_detail, name='post_detail'),
     path('tags/<slug:tag>/', post_list, name='tagged_posts'),
+    path('tags/<slug:tag_slug>/', PostByTagListView.as_view(), name='post_by_tag'),
 ]
