@@ -12,6 +12,7 @@ from .forms import CustomUserCreationForm
 from django.http import HttpResponseForbidden
 from .models import Post,Comment
 from .forms import CommentForm
+from django.views.generic import CommentCreateView,CommentUpdateView,CommentDeleteView
 
 
 # Display Post Detail and Comments
