@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth import login, authenticate
 from .models import Post
@@ -21,7 +22,7 @@ class PostCreateView(login_required, CreateView):
         return super().form_valid(form)
 
 # Update an existing blog post
-class PostUpdateView(login_required, UpdateView):
+class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'blog/post_form.html'
@@ -32,7 +33,7 @@ class PostUpdateView(login_required, UpdateView):
         return queryset.filter(author=self.request.user)
 
 # Delete a blog post
-class PostDeleteView(login_required, DeleteView):
+class PostDeleteView(LoginRequiredMixin, DeleteView):
     model = Post
     template_name = 'blog/post_confirm_delete.html'
     success_url = reverse_lazy('post_list')
