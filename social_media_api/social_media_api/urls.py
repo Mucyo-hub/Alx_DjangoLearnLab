@@ -23,4 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/', include('accounts.urls')),
     path('api/', include('posts.urls')),
+    path('api/accounts/', include('accounts.urls')),  # For follow/unfollow actions
+    path('api/posts/', include('posts.urls')),  # For feed
 ]
