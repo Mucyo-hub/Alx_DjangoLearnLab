@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
-from rest_framework import status, generics
+from rest_framework import status, generics,permissions
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -15,7 +15,7 @@ from rest_framework import status
 User = get_user_model()
 
 class FollowUserView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     def post(self, request, user_id):
         user_to_follow = get_object_or_404(CustomUser.objects.all(), id=user_id)
         if request.user == user_to_follow:
@@ -27,7 +27,7 @@ class FollowUserView(generics.GenericAPIView):
         
 
 class UnfollowUserView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated] 
     def post(self, request, user_id):
         user_to_unfollow = get_object_or_404(CustomUser.objects.all(), id=user_id)
         if request.user == user_to_unfollow:
