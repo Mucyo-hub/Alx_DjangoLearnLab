@@ -1,12 +1,36 @@
-from rest_framework import viewsets, permissions,generics
-from .models import Post, Comment
+from rest_framework import viewsets, permissions,generics,status
+from .models import Post, Comment,Like
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
-from .serializers import PostSerializer, CommentSerializer
+from .serializers import PostSerializer, CommentSerializer,LikeSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 
 CustomUser = get_user_model()  # Get the custom user model
+
+
+class LikePostView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, pk):
+        post = Post.objects.get(pk=pk)
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
+
+        if created:
+            return Response({"message": "Post liked successfully"}, status=status.HTTP_201_CREATED)
+        return Response({"message": "You have already liked this post"}, status=status.HTTP_400_BAD_REQUEST)
+
+class UnlikePostView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def delete(self, request, pk):
+        post = Post.objects.get(pk=pk)
+        like = Like.objects.filter(user=request.user, post=post).first()
+
+        if like:
+            like.delete()
+            return Response({"message": "Post unliked successfully"}, status=status.HTTP_200_OK)
+        return Response({"message": "You haven't liked this post"}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserFeedView(APIView):
     permission_classes = [permissions.IsAuthenticated]  # Ensure only authenticated users access the feed
